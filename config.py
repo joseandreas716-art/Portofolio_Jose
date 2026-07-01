@@ -43,7 +43,12 @@ class Config:
                 f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
             )
     else:
-        db_path = os.path.join(BASE_DIR, 'instance', 'portfolio.db')
+        if os.getenv('VERCEL') == '1':
+            db_path = '/tmp/portfolio.db'
+        else:
+            db_path = os.path.join(BASE_DIR, 'instance', 'portfolio.db')
+            # Ensure instance directory exists locally
+            os.makedirs(os.path.dirname(db_path), exist_ok=True)
         SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path}"
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False

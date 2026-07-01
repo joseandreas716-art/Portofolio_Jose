@@ -67,25 +67,25 @@ def create_app():
 
 app = create_app()
 
-if __name__ == '__main__':
-    with app.app_context():
-        try:
-            db.create_all()
-            print('Database tables verified/created successfully')
-            
-            # Seed default admin if table is empty
-            admin_check = Admin.query.filter_by(username='admin').first()
-            if not admin_check:
-                # pyrefly: ignore [unexpected-keyword]
-                default_admin = Admin(username='admin')
-                default_admin.set_password('admin123')
-                db.session.add(default_admin)
-                db.session.commit()
-                print('Default admin user (admin / admin123) successfully seeded!')
-        except Exception as error:
-            print(f'Warning: Could not configure database: {error}')
-            print('App will continue running, but database features may not work')
+with app.app_context():
+    try:
+        db.create_all()
+        print('Database tables verified/created successfully')
+        
+        # Seed default admin if table is empty
+        admin_check = Admin.query.filter_by(username='admin').first()
+        if not admin_check:
+            # pyrefly: ignore [unexpected-keyword]
+            default_admin = Admin(username='admin')
+            default_admin.set_password('admin123')
+            db.session.add(default_admin)
+            db.session.commit()
+            print('Default admin user (admin / admin123) successfully seeded!')
+    except Exception as error:
+        print(f'Warning: Could not configure database: {error}')
+        print('App will continue running, but database features may not work')
 
+if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, host='0.0.0.0', port=int(os.getenv('PORT', 5001)))
 
 

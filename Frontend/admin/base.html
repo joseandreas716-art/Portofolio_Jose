@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/css/base.css') }}" />
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-cog me-2"></i>Admin</h2>
+                <p>Admin Access</p>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="{{ url_for('utama.home') }}">
+                        <i class="fas fa-globe"></i>Kembali ke Website
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('dashboard.dashboard') }}" 
+                       {% if request.endpoint == 'dashboard.dashboard' %}class="active"{% endif %}>
+                        <i class="fas fa-chart-line"></i>Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('profiles.profile') }}" 
+                       {% if request.endpoint == 'profiles.profile' %}class="active"{% endif %}>
+                        <i class="fas fa-user"></i>Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('skills.skills') }}" 
+                       {% if request.endpoint == 'skills.skills' %}class="active"{% endif %}>
+                        <i class="fas fa-star"></i>Skills
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('experience.experience') }}" 
+                       {% if request.endpoint == 'experience.experience' %}class="active"{% endif %}>
+                        <i class="fas fa-briefcase"></i>Experience
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('projects.projects') }}" 
+                       {% if request.endpoint == 'projects.projects' %}class="active"{% endif %}>
+                        <i class="fas fa-folder"></i>Projects
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <form action="{{ url_for('login.logout') }}" method="POST">
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+                <div class="topbar-right">
+                    <a href="{{ url_for('utama.home') }}" class="btn btn-outline-primary btn-sm me-3" target="_blank">
+                        <i class="fas fa-external-link-alt me-1"></i>Lihat Website
+                    </a>
+                    <div class="admin-info">
+                        <i class="fas fa-user-circle"></i>
+                        <small class="text-white fw-semibold">{{ session.get('admin_username', 'Admin')|capitalize }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {% if category == 'success' %}
+                                    <i class="fas fa-check-circle me-2"></i>
+                                {% elif category == 'danger' %}
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                {% elif category == 'warning' %}
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle me-2"></i>
+                                {% endif %}
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='admin/js/base.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

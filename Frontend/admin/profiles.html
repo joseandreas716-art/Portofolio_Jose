@@ -1,0 +1,163 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Admin Profile{% endblock %}
+{% block page_title %}Manage Profile{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='admin/css/profiles.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="admin-card p-5">
+            <h4 class="mb-4"><i class="fas fa-user-edit me-2"></i>Edit Profile</h4>
+
+            <form action="{{ url_for('profiles.profile') }}" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name *</label>
+                        <input class="form-control" name="full_name" 
+                               value="{{ profile.full_name if profile else '' }}" 
+                               placeholder="Masukkan nama lengkap" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Specialization *</label>
+                        <input class="form-control" name="profession" 
+                               value="{{ profile.profession if profile else '' }}" 
+                               placeholder="Misal: Software Engineer" required />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">About (Bio) *</label>
+                    <textarea class="form-control" name="about" rows="4" 
+                              placeholder="Ceritakan tentang diri Anda..." required>{{ profile.about if profile else '' }}</textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" name="email" 
+                               value="{{ profile.email if profile else '' }}" 
+                               placeholder="your.email@example.com" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone</label>
+                        <input class="form-control" name="phone" 
+                               value="{{ profile.phone if profile else '' }}" 
+                               placeholder="+62 812-3456-7890" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Location</label>
+                        <input class="form-control" name="location" 
+                               value="{{ profile.location if profile else '' }}" 
+                               placeholder="Misal: Indonesia" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">University</label>
+                        <input class="form-control" name="university" 
+                               value="{{ profile.university if profile else '' }}" 
+                               placeholder="Misal: Universitas Kristen Satya Wacana" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Favorite Language</label>
+                        <input class="form-control" name="favorite_language" 
+                               value="{{ profile.favorite_language if profile else '' }}" 
+                               placeholder="Misal: Python" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">LinkedIn</label>
+                        <input class="form-control" name="linkedin" 
+                               value="{{ profile.linkedin if profile else '' }}" 
+                               placeholder="https://linkedin.com/in/..." />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">GitHub</label>
+                        <input class="form-control" name="github" 
+                               value="{{ profile.github if profile else '' }}" 
+                               placeholder="https://github.com/..." />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Instagram</label>
+                        <input class="form-control" name="instagram" 
+                               value="{{ profile.instagram if profile else '' }}" 
+                               placeholder="https://instagram.com/..." />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Profile Photo</label>
+                    <input class="form-control" type="file" name="photo" accept="image/*" 
+                           onchange="previewImage(event)" />
+                    <small class="text-muted d-block mt-2">
+                        <i class="fas fa-info-circle me-1"></i>Format: PNG, JPG, JPEG, GIF, atau WEBP. Max 5MB
+                    </small>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Save Profile
+                        </button>
+                        <button type="reset" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-redo me-2"></i>Reset
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="admin-card p-4">
+            <h5 class="mb-3"><i class="fas fa-image me-2"></i>Profile Preview</h5>
+            <div class="text-center">
+                {% if profile and profile.photo_url %}
+                    <img src="{{ profile.photo_url }}" alt="Profile" class="rounded-circle mb-3" 
+                         style="width: 200px; height: 200px; object-fit: cover;" id="previewImg">
+                {% else %}
+                    <div class="rounded-circle mb-3 bg-light d-flex align-items-center justify-content-center"
+                         style="width: 200px; height: 200px; margin: 0 auto;">
+                        <i class="fas fa-user" style="font-size: 80px; color: #ddd;"></i>
+                    </div>
+                {% endif %}
+                <h6>{{ profile.full_name if profile else 'Your Name' }}</h6>
+                <p class="text-muted mb-0">{{ profile.profession if profile else 'Your Specialization' }}</p>
+            </div>
+
+            <hr>
+
+            <h5 class="mb-3"><i class="fas fa-info-circle me-2"></i>Info</h5>
+            <div class="small">
+                <p>
+                    <strong>Email:</strong><br>
+                    {{ profile.email if profile else 'Not set' }}
+                </p>
+                <p>
+                    <strong>Phone:</strong><br>
+                    {{ profile.phone if profile else 'Not set' }}
+                </p>
+                <p>
+                    <strong>Last Updated:</strong><br>
+                    {% if profile %}
+                        Baru saja
+                    {% else %}
+                        Belum pernah
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='admin/js/profiles.js') }}"></script>
+{% endblock %}

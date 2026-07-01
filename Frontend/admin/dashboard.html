@@ -1,0 +1,174 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='admin/css/dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="admin-card p-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="text-muted mb-1 small">Total Profiles</p>
+                    <h3 class="mb-0 stat-profile">{{ profile_count }}</h3>
+                </div>
+                <div class="stat-profile-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+            <small class="text-success"><i class="fas fa-arrow-up"></i> Profile aktif</small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="admin-card p-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="text-muted mb-1 small">Total Skills</p>
+                    <h3 class="mb-0 stat-skill">{{ skill_count }}</h3>
+                </div>
+                <div class="stat-skill-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <small class="text-success"><i class="fas fa-arrow-up"></i> Skills tersimpan</small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="admin-card p-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="text-muted mb-1 small">Total Experiences</p>
+                    <h3 class="mb-0 stat-experience">{{ experience_count }}</h3>
+                </div>
+                <div class="stat-experience-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+            </div>
+            <small class="text-success"><i class="fas fa-arrow-up"></i> Pengalaman tercatat</small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="admin-card p-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="text-muted mb-1 small">Total Projects</p>
+                    <h3 class="mb-0 stat-project">{{ project_count }}</h3>
+                </div>
+                <div class="stat-project-icon">
+                    <i class="fas fa-folder"></i>
+                </div>
+            </div>
+            <small class="text-success"><i class="fas fa-arrow-up"></i> Project dipublikasikan</small>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="admin-card p-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <p class="text-muted mb-1 small">Total Messages</p>
+                    <h3 class="mb-0 stat-message">{{ contact_count }}</h3>
+                </div>
+                <div class="stat-message-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+            </div>
+            <small class="text-success"><i class="fas fa-arrow-up"></i> Pesan masuk</small>
+        </div>
+    </div>
+</div>
+
+{% if recent_contacts %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="admin-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="mb-0"><i class="fas fa-envelope me-2"></i>Pesan Terbaru</h5>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Subjek</th>
+                            <th>Pesan</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contact in recent_contacts %}
+                        <tr>
+                            <td>
+                                <strong>{{ contact.sender_name }}</strong>
+                            </td>
+                            <td>{{ contact.sender_email }}</td>
+                            <td>{{ contact.subject[:30] }}{% if contact.subject|length > 30 %}...{% endif %}</td>
+                            <td>{{ contact.message[:50] }}{% if contact.message|length > 50 %}...{% endif %}</td>
+                            <td>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar-alt me-1"></i>
+                                    {{ contact.created_at.strftime('%d %b %Y %H:%M') }}
+                                </small>
+                            </td>
+                            <td>
+                                <form action="{{ url_for('dashboard.delete_contact', contact_id=contact.id) }}" method="POST" class="d-inline" 
+                                      onsubmit="return confirm('Yakin ingin menghapus pesan ini?');">
+                                    <button class="btn btn-sm btn-danger" type="submit">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="admin-card p-4">
+            <h5 class="mb-4"><i class="fas fa-info-circle me-2"></i>Quick Links</h5>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <a href="{{ url_for('profiles.profile') }}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-user me-2"></i>Edit Profile
+                    </a>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <a href="{{ url_for('skills.skills') }}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-star me-2"></i>Manage Skills
+                    </a>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <a href="{{ url_for('experience.experience') }}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-briefcase me-2"></i>Manage Experience
+                    </a>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <a href="{{ url_for('projects.projects') }}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-folder me-2"></i>Manage Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='admin/js/dashboard.js') }}"></script>
+{% endblock %}

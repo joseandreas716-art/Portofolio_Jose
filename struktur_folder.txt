@@ -1,0 +1,56 @@
+Struktur Folder Proyek Portofolio:
+
+.env
+.gitignore
+app.py
+config.py
+database.sql
+DB_NIM_NAMA.sql
+favicon.ico
+index.html
+model.py
+README.md
+requirements.txt
+struktur_folder.txt
+Backend/
+    admin/
+        dashboard.py
+        experience.py
+        login.py
+        profiles.py
+        projects.py
+        skills.py
+        upload.py
+    utama/
+        utama.py
+Frontend/
+    admin/
+        css/
+            base.css
+            dashboard.css
+            experience.css
+            login.css
+            profiles.css
+            projects.css
+            skills.css
+        js/
+            api.js
+            base.js
+            dashboard.js
+            experience.js
+            login.js
+            profiles.js
+            projects.js
+            skills.js
+        base.html
+        dashboard.html
+        experience.html
+        login.html
+        profiles.html
+        projects.html
+        skills.html
+    utama/
+        css/
+            style.css
+        js/
+            script.js

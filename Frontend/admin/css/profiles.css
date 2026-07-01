@@ -1,0 +1,5 @@
+/* Profiles specific styling */
+#previewImg {
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+}

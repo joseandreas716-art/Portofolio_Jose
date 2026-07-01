@@ -1,0 +1,10 @@
+/* Projects specific styling */
+.btn-outline-dark {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+.btn-outline-dark:hover {
+    background-color: var(--primary-color);
+    color: #071321;
+    border-color: var(--primary-color);
+}
